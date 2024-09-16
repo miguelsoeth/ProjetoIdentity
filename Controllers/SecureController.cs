@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProjetoIdentity.Models;
 
 namespace IdentityApiWithNpgsql.Controllers;
 
@@ -16,14 +17,13 @@ public class SecureController : ControllerBase
     }
     
     [HttpGet("admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = UsersRoles.Admin)]
     public IActionResult GetMessageAdmin()
     {
         return Ok("Você é administrador do sistema!");
     }
     
     [HttpGet("role")]
-    [Authorize]
     public IActionResult GetRole()
     {
         // Obtém as roles do usuário atual

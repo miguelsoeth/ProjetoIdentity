@@ -4,6 +4,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ProjetoIdentity.Migrations
 {
     /// <inheritdoc />
@@ -156,6 +158,26 @@ namespace ProjetoIdentity.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "39ddb15f-7aad-4db2-bdef-5d485d8b220b", null, "Administrador", "ADMINISTRADOR" },
+                    { "af8aea50-4a87-4aaa-8f45-22c2453c722e", null, "Usuário", "USUÁRIO" },
+                    { "f29be410-832a-4f8a-9ede-7c04cb369816", null, "Usuário Gestor", "USUÁRIO GESTOR" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "825d410f-bb15-415f-8008-91476a196b8f", 0, "c2d7acf4-d237-4875-9f51-d292d25a967f", "admin@mail.com", true, false, null, "ADMIN@MAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEGckKpwz+2KZMWsHtEMw8rBp8xsXKptJISeG8I0VQg8sBDKjrQIp1nJulx3tfLN+ow==", null, false, "8b18a00b-cb6b-474e-ae32-c2ae6268b8ae", false, "Admin" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "39ddb15f-7aad-4db2-bdef-5d485d8b220b", "825d410f-bb15-415f-8008-91476a196b8f" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

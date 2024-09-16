@@ -12,7 +12,7 @@ using ProjetoIdentity.Data;
 namespace ProjetoIdentity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240913172357_Initial")]
+    [Migration("20240916193100_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -49,6 +49,26 @@ namespace ProjetoIdentity.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "39ddb15f-7aad-4db2-bdef-5d485d8b220b",
+                            Name = "Administrador",
+                            NormalizedName = "ADMINISTRADOR"
+                        },
+                        new
+                        {
+                            Id = "f29be410-832a-4f8a-9ede-7c04cb369816",
+                            Name = "Usuário Gestor",
+                            NormalizedName = "USUÁRIO GESTOR"
+                        },
+                        new
+                        {
+                            Id = "af8aea50-4a87-4aaa-8f45-22c2453c722e",
+                            Name = "Usuário",
+                            NormalizedName = "USUÁRIO"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -138,6 +158,24 @@ namespace ProjetoIdentity.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "825d410f-bb15-415f-8008-91476a196b8f",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "c2d7acf4-d237-4875-9f51-d292d25a967f",
+                            Email = "admin@mail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@MAIL.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGckKpwz+2KZMWsHtEMw8rBp8xsXKptJISeG8I0VQg8sBDKjrQIp1nJulx3tfLN+ow==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "8b18a00b-cb6b-474e-ae32-c2ae6268b8ae",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -200,6 +238,13 @@ namespace ProjetoIdentity.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "825d410f-bb15-415f-8008-91476a196b8f",
+                            RoleId = "39ddb15f-7aad-4db2-bdef-5d485d8b220b"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

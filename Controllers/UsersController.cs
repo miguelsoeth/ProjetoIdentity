@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using ProjetoIdentity.Models;
 
 namespace IdentityApiWithNpgsql.Controllers
 {
@@ -28,30 +30,37 @@ namespace IdentityApiWithNpgsql.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(string username, string password, string role)
+        [Authorize(Roles = UsersRoles.Admin)]
+        public async Task<IActionResult> Register([Required]string username, [Required]string password, [Required]string role)
         {
+            var existingUser = await _userManager.FindByNameAsync(username);
+            if (existingUser != null)
+            {
+                return BadRequest("Username already taken.");
+            }
+            
             var user = new IdentityUser { UserName = username };
             var result = await _userManager.CreateAsync(user, password);
-
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                if (!string.IsNullOrEmpty(role))
-                {
-                    var roleExist = await _roleManager.RoleExistsAsync(role);
-                    if (roleExist)
-                    {
-                        await _userManager.AddToRoleAsync(user, role);
-                    }
-                    else
-                    {
-                        return BadRequest("Role does not exist.");
-                    }
-                }
-
-                return Ok("User registered successfully");
+                return BadRequest("Failed to create user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+            
+            var roleExists = await _roleManager.RoleExistsAsync(role);
+            if (!roleExists)
+            {
+                await _userManager.DeleteAsync(user);
+                return BadRequest("Role does not exist.");
             }
 
-            return BadRequest(result.Errors);
+            var roleResult = await _userManager.AddToRoleAsync(user, role);
+            if (!roleResult.Succeeded)
+            {
+                await _userManager.DeleteAsync(user);
+                return BadRequest("Failed to assign role to user: " + string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+            }
+
+            return Ok("User registered successfully");
         }
 
         [HttpPost("login")]
